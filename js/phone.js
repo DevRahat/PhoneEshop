@@ -2,7 +2,7 @@ const loadPhone = async(searchText, isShowAll) =>{
     const res= await fetch(`https://openapi.programming-hero.com/api/phones?search=${searchText}`);
     const data= await res.json();
     const phones=data.data;
-    console.log(phones);
+    // console.log(phones);
     displayPhones(phones,isShowAll);
 
 }
@@ -55,7 +55,7 @@ const handleSearch =(isShowAll) =>{
     toggleLoadingSpinner(true);
     const searchField=document.getElementById('search-field');
     const searchText=searchField.value;
-    console.log(searchText);
+    
     loadPhone(searchText, isShowAll);
 }
 const toggleLoadingSpinner = (isLoading) =>{
@@ -67,8 +67,29 @@ const toggleLoadingSpinner = (isLoading) =>{
     }
 }
 // Show details 
-const handleShowDetail =(id) =>{
+const handleShowDetail =async (id) =>{
     console.log('clicked Show Details',id );
+    const res =await fetch(`https://openapi.programming-hero.com/api/phone/${id}`);
+    const data = await res.json();
+    const phone=data.data;
+    showPhoneDetails(phone);
+
+    
+}
+const showPhoneDetails = (phone) =>{
+    console.log(phone);
+
+    const phoneName =document.getElementById('show-phone-name');
+    phoneName.innerText=phone.name;
+
+    const showDetailContainer=document.getElementById('show-detail-container');
+    showDetailContainer.innerHTML=`
+    <img src="${phone.image}" alt="" />
+    <p><span>Storage:</span>${phone?.mainFeatures?.storage}</p>
+    <p><span>Memory:</span>${phone?.mainFeatures?.storage}</p>
+    `;
+    //show the showModal
+    show_details_modal.showModal();
 }
 
 //handle Show all function 
@@ -77,4 +98,4 @@ const handleShowAll = () =>{
     handleSearch(true)
 }
 
-// loadPhone();
+//loadPhone();
